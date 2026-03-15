@@ -41,6 +41,7 @@ export class ShowcaseComponent implements OnInit {
     this.successMessages = [
       {
         severity: 'success',
+        icon: 'pi-check-circle',
         summary: 'Success',
         detail: 'Operation completed successfully',
       },
@@ -49,6 +50,7 @@ export class ShowcaseComponent implements OnInit {
     this.infoMessages = [
       {
         severity: 'info',
+        icon: 'pi-info-circle',
         summary: 'Info',
         detail: 'This is an informational message',
       },
@@ -57,6 +59,7 @@ export class ShowcaseComponent implements OnInit {
     this.warnMessages = [
       {
         severity: 'warn',
+        icon: 'pi-exclamation-triangle',
         summary: 'Warning',
         detail: 'Please review this warning carefully',
       },
@@ -65,6 +68,7 @@ export class ShowcaseComponent implements OnInit {
     this.errorMessages = [
       {
         severity: 'error',
+        icon: 'pi-times-circle',
         summary: 'Error',
         detail: 'An error occurred during processing',
       },

@@ -45,6 +45,7 @@ export class EmployeeDetailComponent implements OnInit {
         this.messages = [
           {
             severity: 'success',
+            icon: 'pi-check-circle',
             summary: 'Loaded',
             detail: `${data.name}'s profile loaded successfully.`,
           },
@@ -55,6 +56,7 @@ export class EmployeeDetailComponent implements OnInit {
         this.messages = [
           {
             severity: 'error',
+            icon: 'pi-times-circle',
             summary: 'Error',
             detail: 'Failed to load employee data. Please try again.',
           },
@@ -71,6 +73,7 @@ export class EmployeeDetailComponent implements OnInit {
     this.messages = [
       {
         severity: 'info',
+        icon: 'pi-info-circle',
         summary: 'Coming Soon',
         detail: 'Edit Employee feature is not yet implemented.',
       },
@@ -81,6 +84,7 @@ export class EmployeeDetailComponent implements OnInit {
     this.messages = [
       {
         severity: 'warn',
+        icon: 'pi-exclamation-triangle',
         summary: 'Coming Soon',
         detail: 'Delete Employee feature is not yet implemented.',
       },

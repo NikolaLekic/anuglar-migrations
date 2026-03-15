@@ -36,6 +36,7 @@ export class EmployeeListComponent implements OnInit {
         this.messages = [
           {
             severity: 'success',
+            icon: 'pi-check-circle',
             summary: 'Success',
             detail: `${data.length} employees retrieved successfully.`,
           },
@@ -46,6 +47,7 @@ export class EmployeeListComponent implements OnInit {
         this.messages = [
           {
             severity: 'error',
+            icon: 'pi-times-circle',
             summary: 'Error',
             detail:
               'Cannot reach the API server. Ensure json-server is running on port 3000.',
@@ -63,6 +65,7 @@ export class EmployeeListComponent implements OnInit {
     this.messages = [
       {
         severity: 'info',
+        icon: 'pi-info-circle',
         summary: 'Coming Soon',
         detail: 'Add Employee feature is not yet implemented.',
       },

@@ -148,7 +148,7 @@ body {
   ul li {
     .p-breadcrumb-item-link {
       border-radius: var(--border-radius);
-      transition: color $speed $easing;
+      transition: color $speed $easing, background $speed $easing;
 
       .p-breadcrumb-item-label {
         color: var(--text-color-secondary);
@@ -161,6 +161,7 @@ body {
       }
 
       &:hover {
+        background: transparent;  // prevent any PrimeNG token hover-background bleed
         .p-breadcrumb-item-label,
         .p-breadcrumb-item-icon { color: var(--primary-color); }
       }
@@ -175,6 +176,13 @@ body {
     &:last-child .p-breadcrumb-item-link .p-breadcrumb-item-label {
       color: var(--text-color);
       font-weight: 600;
+    }
+
+    // Last item is the current page — make it non-interactive so it
+    // doesn't receive the hover colour change (matches v17 behaviour)
+    &:last-child .p-breadcrumb-item-link {
+      pointer-events: none;
+      cursor: default;
     }
   }
 }
@@ -191,6 +199,7 @@ body {
     border-radius: var(--border-radius);
     border-width: 0 0 0 4px;
     border-style: solid;
+    box-shadow: none;             // prevent Nora's inset-shadow border from showing
     margin-bottom: 0.5rem;
 
     .p-message-content {
@@ -205,7 +214,10 @@ body {
       line-height: 1.5;
     }
 
-    .p-message-summary {
+    // Summary text — bold. The fallback targets the first span inside
+    // .p-message-text in case PrimeNG 18 doesn't emit the p-message-summary class.
+    .p-message-summary,
+    .p-message-text > span:first-child {
       font-weight: 700;
       margin-right: 0.25rem;
     }
@@ -248,6 +260,22 @@ body {
       color: $danger-text;
 
       .p-message-icon { color: $danger; }
+    }
+
+    &.p-message-secondary {
+      background: $secondary-bg;
+      border-color: $secondary-border;
+      color: $secondary-text;
+
+      .p-message-icon { color: $secondary-text; }
+    }
+
+    &.p-message-contrast {
+      background: var(--text-color);
+      border-color: var(--text-color);
+      color: #fff;
+
+      .p-message-icon { color: #fff; }
     }
   }
 }
@@ -314,7 +342,7 @@ body {
   }
 
   // ── Warning ────────────────────────────────────
-  &.p-button-warning:not(.p-button-outlined):not(.p-button-text) {
+  &.p-button-warn:not(.p-button-outlined):not(.p-button-text) {
     @include btn-filled($warn, $warn, #fff, $warn-dark);
   }
 
@@ -325,7 +353,7 @@ body {
 
   // ── Outlined variants ──────────────────────────
   &.p-button-outlined {
-    &:not([class*='p-button-secondary']):not([class*='p-button-success']):not([class*='p-button-info']):not([class*='p-button-warning']):not([class*='p-button-danger']) {
+    &:not([class*='p-button-secondary']):not([class*='p-button-success']):not([class*='p-button-info']):not([class*='p-button-warn']):not([class*='p-button-danger']) {
       @include btn-outlined($primary, rgba($primary, 0.08));
     }
 
@@ -342,7 +370,7 @@ body {
       @include btn-outlined($info-dark, rgba($info, 0.08));
     }
 
-    &.p-button-warning {
+    &.p-button-warn {
       @include btn-outlined($warn-dark, rgba($warn, 0.1));
     }
 
@@ -353,7 +381,7 @@ body {
 
   // ── Text / ghost variants ──────────────────────
   &.p-button-text {
-    &:not([class*='p-button-secondary']):not([class*='p-button-success']):not([class*='p-button-info']):not([class*='p-button-warning']):not([class*='p-button-danger']) {
+    &:not([class*='p-button-secondary']):not([class*='p-button-success']):not([class*='p-button-info']):not([class*='p-button-warn']):not([class*='p-button-danger']) {
       @include btn-text($primary, rgba($primary, 0.08));
     }
 
@@ -369,7 +397,7 @@ body {
       @include btn-text($info-dark, rgba($info, 0.08));
     }
 
-    &.p-button-warning {
+    &.p-button-warn {
       @include btn-text($warn-dark, rgba($warn, 0.1));
     }
 
@@ -608,7 +636,7 @@ body {
 
   &.p-tag-success  { background: $success-bg;   color: $success-text; }
   &.p-tag-danger   { background: $danger-bg;    color: $danger-text; }
-  &.p-tag-warning  { background: $warn-bg;      color: $warn-text; }
+  &.p-tag-warn  { background: $warn-bg;      color: $warn-text; }
   &.p-tag-info     { background: $info-bg;      color: $info-text; }
   &.p-tag-contrast { background: var(--text-color); color: #fff; }
 }

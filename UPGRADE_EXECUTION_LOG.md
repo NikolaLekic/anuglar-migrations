@@ -639,6 +639,221 @@ Updating Node.js to 20.19.x or higher would resolve it.
 
 ---
 
+## Step 8 — Post-Migration Visual Regression Fixes
+
+After the initial migration a visual inspection identified five regressions and two
+additional proactive issues. All were fixed with targeted changes to `resources.min.scss`
+and the three component TypeScript files that create message objects.
+
+### 8.1 Warning severity class rename missed: `p-button-warning` → `p-button-warn`
+
+**Root cause:** PrimeNG 18 changed the severity string for warning from `'warning'` to
+`'warn'`. The button component generates its CSS class dynamically as
+`p-button-${severity}`, so `severity="warn"` produces class `p-button-warn` — not
+`p-button-warning`. Our existing selectors used `p-button-warning` (three occurrences:
+filled, outlined, ghost variants), so none of them ever matched a rendered element.
+PrimeNG's layered default amber-toned styles bled through as-is.
+
+**Fix:** Renamed all three selectors in `resources.min.scss`:
+
+```scss
+// BEFORE
+&.p-button-warning:not(.p-button-outlined):not(.p-button-text) { ... }
+&.p-button-outlined { &.p-button-warning { ... } }
+&.p-button-text     { &.p-button-warning { ... } }
+
+// AFTER
+&.p-button-warn:not(.p-button-outlined):not(.p-button-text) { ... }
+&.p-button-outlined { &.p-button-warn { ... } }
+&.p-button-text     { &.p-button-warn { ... } }
+```
+
+Also updated the `not([class*=...])` guards on the primary outlined/text fallback selectors
+(`p-button-warning` → `p-button-warn`) so the primary fallback does not fire on warn buttons.
+
+### 8.2 Warning severity class rename missed: `p-tag-warning` → `p-tag-warn`
+
+**Root cause:** Same pattern as 8.1 — PrimeNG 18's Tag component sets class `p-tag-warn`
+for `severity="warn"`. Our selector `&.p-tag-warning` never matched.
+
+**Fix:** Renamed in `resources.min.scss`:
+
+```scss
+// BEFORE
+&.p-tag-warning { background: $warn-bg; color: $warn-text; }
+
+// AFTER
+&.p-tag-warn    { background: $warn-bg; color: $warn-text; }
+```
+
+### 8.3 Messages showing a full border
+
+**Root cause:** PrimeNG 18's Nora preset injects an `inset box-shadow` on `.p-message`
+via its `@layer primeng` styles to simulate a 1 px all-around border. Our CSS reset
+`border-width: 0 0 0 4px` only controls the real `border` property — it has no effect on
+`box-shadow`. Because our non-layered rule never declared `box-shadow`, Nora's layered
+inset shadow applied untouched, producing the visible full border.
+
+**Fix:** Added `box-shadow: none` to the `.p-messages .p-message` base rule:
+
+```scss
+.p-message {
+  border-radius: var(--border-radius);
+  border-width: 0 0 0 4px;
+  border-style: solid;
+  box-shadow: none;             // prevent Nora's inset-shadow border from showing
+  margin-bottom: 0.5rem;
+}
+```
+
+### 8.4 Message summary text no longer bold
+
+**Root cause:** In PrimeNG 18 the summary `<span>` receives both `p-message-text` and
+`p-message-summary` as CSS classes. Our existing `.p-message-summary { font-weight: 700 }`
+sits later in the cascade than `.p-message-text { font-weight: 500 }` at the same
+specificity, so it should win. However, when `<p-messages>` (deprecated) delegates to the
+inner `<p-message>` component in certain rendering paths, the `p-message-summary` class
+may not be emitted on the span — leaving only `p-message-text` with weight 500.
+
+**Fix:** Added a structural fallback selector targeting the first `<span>` inside the text
+wrapper regardless of its class name:
+
+```scss
+// BEFORE
+.p-message-summary {
+  font-weight: 700;
+  margin-right: 0.25rem;
+}
+
+// AFTER
+.p-message-summary,
+.p-message-text > span:first-child {
+  font-weight: 700;
+  margin-right: 0.25rem;
+}
+```
+
+### 8.5 Breadcrumb hover colour different
+
+**Root cause — background:** PrimeNG 18's Nora token variables can resolve a hover
+background tint through the theme token cascade on `.p-breadcrumb-item-link:hover`. Our
+non-layered hover rule only set `color` on child spans — it never declared `background`
+on the link itself, so the token-driven background was free to apply from the layer.
+
+**Root cause — last item interactivity:** In PrimeNG 18 the last (current-page) breadcrumb
+item renders as `<a class="p-breadcrumb-item-link">` even when no route is assigned. In
+PrimeNG 17 it was a non-interactive `<span>`. The hover colour rule now applied to it,
+turning its text primary-indigo on hover — a visible difference from v17 behaviour.
+
+**Fix — two changes:**
+
+1. Explicit `background: transparent` on the link hover state:
+
+```scss
+&:hover {
+  background: transparent;
+  .p-breadcrumb-item-label,
+  .p-breadcrumb-item-icon { color: var(--primary-color); }
+}
+```
+
+2. Last item made non-interactive to match v17 behaviour:
+
+```scss
+&:last-child .p-breadcrumb-item-link {
+  pointer-events: none;
+  cursor: default;
+}
+```
+
+Also extended the link's `transition` to include `background` alongside `color`.
+
+### 8.6 All message icons show the info icon regardless of severity
+
+**Root cause — confirmed PrimeNG 18 bug:** Verified by reading the compiled source
+`node_modules/primeng/fesm2022/primeng-messages.mjs`. The deprecated `<p-messages>`
+component template has a logic error:
+
+```html
+@if (msg.icon) {
+  <span class="pi {{ msg.icon }}"></span>    <!-- only when msg.icon is truthy -->
+} @else {
+  @switch (msg.icon) {                       <!-- BUG: still evaluates undefined -->
+    @case ('success') { <CheckIcon /> }
+    @case ('warn')    { <ExclamationTriangleIcon /> }
+    @case ('error')   { <TimesCircleIcon /> }
+    @default          { <InfoCircleIcon /> } <!-- always reached -->
+  }
+}
+```
+
+`msg.icon` is `undefined` when no `icon` property is set on the message object. The
+`@else` branch runs, and the `@switch` inside re-evaluates `msg.icon` (still `undefined`)
+— all cases fail and `<InfoCircleIcon>` is always rendered regardless of severity.
+Neither `<p-messages>` nor `<p-message>` maps `severity` to `icon` anywhere in the
+component code.
+
+**Fix:** Added an explicit `icon` field to every message object in all three component
+files. When `msg.icon` is truthy PrimeNG takes the `@if` path and renders
+`<span class="pi {icon}">` — the correct PrimeIcons font glyph:
+
+| Severity | `icon` value |
+|---|---|
+| `'success'` | `'pi-check-circle'` |
+| `'info'` | `'pi-info-circle'` |
+| `'warn'` | `'pi-exclamation-triangle'` |
+| `'error'` | `'pi-times-circle'` |
+
+```typescript
+// BEFORE
+{ severity: 'success', summary: 'Success', detail: '...' }
+
+// AFTER
+{ severity: 'success', icon: 'pi-check-circle', summary: 'Success', detail: '...' }
+```
+
+Files changed: `employee-list.component.ts` (3 messages), `employee-detail.component.ts`
+(4 messages), `showcase.component.ts` `initializeMessages()` (4 messages).
+
+### 8.7 New PrimeNG 18 severity values not covered: `secondary` and `contrast` (Proactive)
+
+PrimeNG 18 added `'secondary'` and `'contrast'` as valid severity values for `<p-messages>`.
+No override blocks existed for them — messages with those severities would show Nora's raw
+token colours, which may not match the application palette.
+
+**Fix:** Added two blocks to the messages section in `resources.min.scss`:
+
+```scss
+&.p-message-secondary {
+  background: $secondary-bg;
+  border-color: $secondary-border;
+  color: $secondary-text;
+  .p-message-icon { color: $secondary-text; }
+}
+
+&.p-message-contrast {
+  background: var(--text-color);
+  border-color: var(--text-color);
+  color: #fff;
+  .p-message-icon { color: #fff; }
+}
+```
+
+---
+
+## Step 8 Verification
+
+All four checks ran green after the visual-regression fixes with no further modifications:
+
+```bash
+npx tsc --noEmit           # zero errors
+npm test -- --watch=false   # 43/43 SUCCESS
+npm run lint                # All files pass linting
+npm run build:prod          # Build succeeded — 1.54 MB initial bundle
+```
+
+---
+
 ## Summary of All Changed Files
 
 | File | Change |
@@ -647,7 +862,7 @@ Updating Node.js to 20.19.x or higher would resolve it.
 | `angular.json` | Removed `primeng/resources/primeng.min.css` from styles array |
 | `src/app/app.module.ts` | `definePreset(Nora, {...})` with indigo primary + slate surface tokens; `providePrimeNG` with `cssLayer` |
 | `.eslintrc.json` | Added `"@angular-eslint/prefer-standalone": "off"` |
-| `src/assets/styles/resources.min.scss` | Five CSS class renames: breadcrumb, messages, paginator, table header, table row |
-| `src/app/features/employees/employee-list/employee-list.component.ts` | `Message[]` → `ToastMessageOptions[]`; `getStatusSeverity` return type |
-| `src/app/features/employees/employee-detail/employee-detail.component.ts` | `Message[]` → `ToastMessageOptions[]`; `getStatusSeverity` return type |
-| `src/app/features/showcase/showcase.component.ts` | Five `Message[]` arrays → `ToastMessageOptions[]` |
+| `src/assets/styles/resources.min.scss` | Class renames (Steps 5.1–5.5); visual regression fixes (Step 8): `p-button-warning` → `p-button-warn`, `p-tag-warning` → `p-tag-warn`, `box-shadow: none` on messages, summary bold fallback, breadcrumb hover reset + last-item non-interactive, secondary/contrast message blocks |
+| `src/app/features/employees/employee-list/employee-list.component.ts` | `Message[]` → `ToastMessageOptions[]`; `getStatusSeverity` return type; `icon` field added to all 3 message objects |
+| `src/app/features/employees/employee-detail/employee-detail.component.ts` | `Message[]` → `ToastMessageOptions[]`; `getStatusSeverity` return type; `icon` field added to all 4 message objects |
+| `src/app/features/showcase/showcase.component.ts` | Five `Message[]` arrays → `ToastMessageOptions[]`; `icon` field added to all 4 `initializeMessages` objects |
