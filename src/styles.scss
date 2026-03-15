@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+/* ─── Layout helpers ──────────────────────────── */
+
+.page-wrapper {
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.page-header__left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* ─── App shell ───────────────────────────────── */
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  background: var(--surface-ground);
+}
+
+/* ─── Loading state ───────────────────────────── */
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 4rem 1rem;
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+.loading-state i {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+/* ─── Detail grid ─────────────────────────────── */
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.detail-card--full {
+  grid-column: 1 / -1;
+}
+
+/* ─── Detail fields ───────────────────────────── */
+
+.detail-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.detail-field:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.detail-field__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-color-secondary);
+}
+
+.detail-field__value {
+  font-size: 0.9375rem;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.detail-field__value--link {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.detail-field__value--link:hover {
+  text-decoration: underline;
+}
+
+.detail-field__value--salary {
+  font-weight: 700;
+}
+
+/* ─── Bio ─────────────────────────────────────── */
+
+.bio-text {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--text-color);
+  line-height: 1.75;
+}

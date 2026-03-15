@@ -1,0 +1,44 @@
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+}
+
+.employee-name {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+
+  &__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--primary-color-light);
+    color: var(--primary-color-dark);
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+}
+
+.empty-message {
+  text-align: center;
+  padding: 3.5rem 1rem !important;
+  color: var(--text-color-secondary);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+
+  i {
+    font-size: 2rem;
+    opacity: 0.4;
+  }
+
+  span {
+    font-size: 0.9375rem;
+  }
+}

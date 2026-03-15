@@ -1,0 +1,117 @@
+<div class="page-wrapper">
+  <!-- Breadcrumb -->
+  <p-breadcrumb
+    [model]="breadcrumbItems"
+    [home]="homeItem"
+    aria-label="breadcrumb"
+  >
+  </p-breadcrumb>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="page-header__left">
+      <h2>Employees</h2>
+      <span class="subtitle">Manage your team members</span>
+    </div>
+    <div class="flex gap-2">
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Refresh"
+        icon="pi pi-refresh"
+        class="p-button-outlined p-button-secondary p-button-sm"
+        [disabled]="loading"
+        (click)="loadEmployees()"
+        aria-label="Refresh employee list"
+      ></button>
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Add New"
+        icon="pi pi-plus"
+        class="p-button-sm"
+        (click)="onAddNew()"
+        aria-label="Add new employee"
+      ></button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <p-messages [(value)]="messages" [enableService]="false" [closable]="true">
+  </p-messages>
+
+  <!-- Table -->
+  <p-table
+    [value]="employees"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [sortMode]="'multiple'"
+    (onRowSelect)="onRowSelect($event.data)"
+    selectionMode="single"
+    styleClass="p-datatable-striped"
+    [rowHover]="true"
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id" style="width: 4rem">
+          # <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">
+          Name <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th>Email</th>
+        <th pSortableColumn="department">
+          Department <p-sortIcon field="department"></p-sortIcon>
+        </th>
+        <th pSortableColumn="role">
+          Role <p-sortIcon field="role"></p-sortIcon>
+        </th>
+        <th pSortableColumn="status" style="width: 8rem">
+          Status <p-sortIcon field="status"></p-sortIcon>
+        </th>
+        <th pSortableColumn="joinDate">
+          Join Date <p-sortIcon field="joinDate"></p-sortIcon>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-emp>
+      <tr [pSelectableRow]="emp">
+        <td class="text-color-secondary">{{ emp.id }}</td>
+        <td>
+          <div class="employee-name">
+            <span class="employee-name__avatar">{{ emp.name.charAt(0) }}</span>
+            <strong>{{ emp.name }}</strong>
+          </div>
+        </td>
+        <td class="text-color-secondary">{{ emp.email }}</td>
+        <td>{{ emp.department }}</td>
+        <td>{{ emp.role }}</td>
+        <td>
+          <p-tag
+            [value]="getStatusLabel(emp.status)"
+            [severity]="getStatusSeverity(emp.status)"
+          >
+          </p-tag>
+        </td>
+        <td class="text-color-secondary">
+          {{ emp.joinDate | date: "MMM d, yyyy" }}
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="empty-message">
+          <i class="pi pi-users"></i>
+          <span>No employee records found.</span>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

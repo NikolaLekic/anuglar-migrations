@@ -1,0 +1,139 @@
+<div class="page-wrapper">
+  <!-- Breadcrumb -->
+  <p-breadcrumb
+    [model]="breadcrumbItems"
+    [home]="homeItem"
+    aria-label="breadcrumb"
+  >
+  </p-breadcrumb>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="page-header__left">
+      <h2>{{ employee ? employee.name : "Employee Detail" }}</h2>
+      <span *ngIf="employee" class="subtitle">
+        {{ employee.department }} &mdash; {{ employee.role }}
+      </span>
+    </div>
+    <div class="flex gap-2">
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Back"
+        icon="pi pi-arrow-left"
+        class="p-button-outlined p-button-secondary p-button-sm"
+        (click)="onBack()"
+        aria-label="Return to employee list"
+      ></button>
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Edit"
+        icon="pi pi-pencil"
+        class="p-button-warning p-button-sm"
+        [disabled]="!employee || loading"
+        (click)="onEdit()"
+        aria-label="Edit employee"
+      ></button>
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Delete"
+        icon="pi pi-trash"
+        class="p-button-danger p-button-sm"
+        [disabled]="!employee || loading"
+        (click)="onDelete()"
+        aria-label="Delete employee"
+      ></button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <p-messages [(value)]="messages" [enableService]="false" [closable]="true">
+  </p-messages>
+
+  <!-- Loading state -->
+  <div *ngIf="loading" class="loading-state" role="status" aria-live="polite">
+    <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+    <span>Loading employee data...</span>
+  </div>
+
+  <!-- Detail cards -->
+  <div *ngIf="employee && !loading" class="detail-grid">
+    <!-- Personal Information -->
+    <p-card>
+      <ng-template pTemplate="title">Personal Information</ng-template>
+      <div class="detail-fields">
+        <div class="detail-field">
+          <span class="detail-field__label">Full Name</span>
+          <span class="detail-field__value">{{ employee.name }}</span>
+        </div>
+        <div class="detail-field">
+          <span class="detail-field__label">Email Address</span>
+          <a
+            class="detail-field__value detail-field__value--link"
+            [href]="'mailto:' + employee.email"
+          >
+            {{ employee.email }}
+          </a>
+        </div>
+        <div class="detail-field">
+          <span class="detail-field__label">Phone</span>
+          <span class="detail-field__value">{{ employee.phone }}</span>
+        </div>
+        <div class="detail-field">
+          <span class="detail-field__label">Address</span>
+          <span class="detail-field__value">{{ employee.address }}</span>
+        </div>
+      </div>
+    </p-card>
+
+    <!-- Employment Information -->
+    <p-card>
+      <ng-template pTemplate="title">Employment Information</ng-template>
+      <div class="detail-fields">
+        <div class="detail-field">
+          <span class="detail-field__label">Department</span>
+          <span class="detail-field__value">{{ employee.department }}</span>
+        </div>
+        <div class="detail-field">
+          <span class="detail-field__label">Role</span>
+          <span class="detail-field__value">{{ employee.role }}</span>
+        </div>
+        <div class="detail-field">
+          <span class="detail-field__label">Status</span>
+          <p-tag
+            [value]="getStatusLabel(employee.status)"
+            [severity]="getStatusSeverity(employee.status)"
+          >
+          </p-tag>
+        </div>
+        <div class="detail-field">
+          <span class="detail-field__label">Join Date</span>
+          <span class="detail-field__value">
+            {{ employee.joinDate | date: "MMMM d, yyyy" }}
+          </span>
+        </div>
+        <div class="detail-field">
+          <span class="detail-field__label">Manager</span>
+          <span class="detail-field__value">{{ employee.manager }}</span>
+        </div>
+        <div class="detail-field">
+          <span class="detail-field__label">Annual Salary</span>
+          <span class="detail-field__value detail-field__value--salary">
+            {{ employee.salary | currency: "USD" : "symbol" : "1.0-0" }}
+          </span>
+        </div>
+      </div>
+    </p-card>
+
+    <!-- Biography — full width -->
+    <p-card styleClass="detail-card--full">
+      <ng-template pTemplate="title">Biography</ng-template>
+      <p class="bio-text">{{ employee.bio }}</p>
+    </p-card>
+  </div>
+</div>
