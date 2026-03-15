@@ -12,7 +12,14 @@ const routes: Routes = [
         path: 'employees',
         loadChildren: () =>
           import('./features/employees/employees.module').then(
-            (m) => m.EmployeesModule
+            (m) => m.EmployeesModule,
+          ),
+      },
+      {
+        path: 'showcase',
+        loadChildren: () =>
+          import('./features/showcase/showcase.module').then(
+            (m) => m.ShowcaseModule,
           ),
       },
     ],

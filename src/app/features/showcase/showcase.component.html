@@ -1,0 +1,486 @@
+<div class="showcase-container">
+  <div class="showcase-header">
+    <h1>PrimeNG Component Showcase</h1>
+    <p class="showcase-subtitle">
+      Visual reference for all UI components used in this application
+    </p>
+  </div>
+
+  <!-- Breadcrumb Section -->
+  <section class="showcase-section">
+    <h2 class="section-title">Breadcrumb</h2>
+    <div class="component-demo">
+      <p-breadcrumb
+        [model]="breadcrumbItems"
+        [home]="breadcrumbHome"
+      ></p-breadcrumb>
+    </div>
+  </section>
+
+  <!-- Messages Section -->
+  <section class="showcase-section">
+    <h2 class="section-title">Messages - All Severities</h2>
+
+    <div class="component-demo">
+      <h3>Success Message</h3>
+      <p-messages [value]="successMessages" [closable]="false"></p-messages>
+    </div>
+
+    <div class="component-demo">
+      <h3>Info Message</h3>
+      <p-messages [value]="infoMessages" [closable]="false"></p-messages>
+    </div>
+
+    <div class="component-demo">
+      <h3>Warning Message</h3>
+      <p-messages [value]="warnMessages" [closable]="false"></p-messages>
+    </div>
+
+    <div class="component-demo">
+      <h3>Error Message</h3>
+      <p-messages [value]="errorMessages" [closable]="false"></p-messages>
+    </div>
+
+    <div class="component-demo">
+      <h3>All Messages Together</h3>
+      <p-messages [value]="allMessages"></p-messages>
+    </div>
+
+    <div class="component-demo">
+      <h3>Inline Messages</h3>
+      <div class="inline-messages">
+        <p-message severity="success" text="Success Message"></p-message>
+        <p-message severity="info" text="Info Message"></p-message>
+        <p-message severity="warn" text="Warning Message"></p-message>
+        <p-message severity="error" text="Error Message"></p-message>
+      </div>
+    </div>
+  </section>
+
+  <!-- Buttons Section -->
+  <section class="showcase-section">
+    <h2 class="section-title">Buttons - All Variants</h2>
+
+    <div class="component-demo">
+      <h3>Primary Buttons</h3>
+      <div class="button-group">
+        <p-button
+          label="Primary"
+          icon="pi pi-check"
+          (onClick)="onButtonClick('primary')"
+        ></p-button>
+        <p-button
+          label="Primary Outlined"
+          icon="pi pi-check"
+          [outlined]="true"
+          (onClick)="onButtonClick('primary-outlined')"
+        ></p-button>
+        <p-button
+          label="Primary Text"
+          icon="pi pi-check"
+          [text]="true"
+          (onClick)="onButtonClick('primary-text')"
+        ></p-button>
+      </div>
+    </div>
+
+    <div class="component-demo">
+      <h3>Secondary Buttons</h3>
+      <div class="button-group">
+        <p-button
+          label="Secondary"
+          icon="pi pi-user"
+          severity="secondary"
+          (onClick)="onButtonClick('secondary')"
+        ></p-button>
+        <p-button
+          label="Secondary Outlined"
+          icon="pi pi-user"
+          severity="secondary"
+          [outlined]="true"
+          (onClick)="onButtonClick('secondary-outlined')"
+        ></p-button>
+        <p-button
+          label="Secondary Text"
+          icon="pi pi-user"
+          severity="secondary"
+          [text]="true"
+          (onClick)="onButtonClick('secondary-text')"
+        ></p-button>
+      </div>
+    </div>
+
+    <div class="component-demo">
+      <h3>Success Buttons</h3>
+      <div class="button-group">
+        <p-button
+          label="Success"
+          icon="pi pi-check"
+          severity="success"
+          (onClick)="onButtonClick('success')"
+        ></p-button>
+        <p-button
+          label="Success Outlined"
+          icon="pi pi-check"
+          severity="success"
+          [outlined]="true"
+          (onClick)="onButtonClick('success-outlined')"
+        ></p-button>
+        <p-button
+          label="Success Text"
+          icon="pi pi-check"
+          severity="success"
+          [text]="true"
+          (onClick)="onButtonClick('success-text')"
+        ></p-button>
+      </div>
+    </div>
+
+    <div class="component-demo">
+      <h3>Info Buttons</h3>
+      <div class="button-group">
+        <p-button
+          label="Info"
+          icon="pi pi-info-circle"
+          severity="info"
+          (onClick)="onButtonClick('info')"
+        ></p-button>
+        <p-button
+          label="Info Outlined"
+          icon="pi pi-info-circle"
+          severity="info"
+          [outlined]="true"
+          (onClick)="onButtonClick('info-outlined')"
+        ></p-button>
+        <p-button
+          label="Info Text"
+          icon="pi pi-info-circle"
+          severity="info"
+          [text]="true"
+          (onClick)="onButtonClick('info-text')"
+        ></p-button>
+      </div>
+    </div>
+
+    <div class="component-demo">
+      <h3>Warning Buttons</h3>
+      <div class="button-group">
+        <p-button
+          label="Warning"
+          icon="pi pi-exclamation-triangle"
+          severity="warning"
+          (onClick)="onButtonClick('warning')"
+        ></p-button>
+        <p-button
+          label="Warning Outlined"
+          icon="pi pi-exclamation-triangle"
+          severity="warning"
+          [outlined]="true"
+          (onClick)="onButtonClick('warning-outlined')"
+        ></p-button>
+        <p-button
+          label="Warning Text"
+          icon="pi pi-exclamation-triangle"
+          severity="warning"
+          [text]="true"
+          (onClick)="onButtonClick('warning-text')"
+        ></p-button>
+      </div>
+    </div>
+
+    <div class="component-demo">
+      <h3>Danger Buttons</h3>
+      <div class="button-group">
+        <p-button
+          label="Danger"
+          icon="pi pi-times"
+          severity="danger"
+          (onClick)="onButtonClick('danger')"
+        ></p-button>
+        <p-button
+          label="Danger Outlined"
+          icon="pi pi-times"
+          severity="danger"
+          [outlined]="true"
+          (onClick)="onButtonClick('danger-outlined')"
+        ></p-button>
+        <p-button
+          label="Danger Text"
+          icon="pi pi-times"
+          severity="danger"
+          [text]="true"
+          (onClick)="onButtonClick('danger-text')"
+        ></p-button>
+      </div>
+    </div>
+
+    <div class="component-demo">
+      <h3>Button States</h3>
+      <div class="button-group">
+        <p-button
+          label="Disabled Button"
+          icon="pi pi-ban"
+          [disabled]="true"
+        ></p-button>
+        <p-button
+          label="Toggle Disabled"
+          icon="pi pi-lock"
+          [disabled]="buttonDisabled"
+          (onClick)="toggleButtonDisabled()"
+        ></p-button>
+        <p-button
+          label="Loading Button"
+          icon="pi pi-spin pi-spinner"
+          [loading]="buttonLoading"
+          (onClick)="toggleButtonLoading()"
+        ></p-button>
+      </div>
+    </div>
+
+    <div class="component-demo">
+      <h3>Icon-Only Buttons</h3>
+      <div class="button-group">
+        <p-button
+          icon="pi pi-check"
+          [rounded]="true"
+          (onClick)="onButtonClick('icon-primary')"
+        ></p-button>
+        <p-button
+          icon="pi pi-bookmark"
+          [rounded]="true"
+          severity="secondary"
+          (onClick)="onButtonClick('icon-secondary')"
+        ></p-button>
+        <p-button
+          icon="pi pi-check"
+          [rounded]="true"
+          severity="success"
+          (onClick)="onButtonClick('icon-success')"
+        ></p-button>
+        <p-button
+          icon="pi pi-info"
+          [rounded]="true"
+          severity="info"
+          (onClick)="onButtonClick('icon-info')"
+        ></p-button>
+        <p-button
+          icon="pi pi-exclamation-triangle"
+          [rounded]="true"
+          severity="warning"
+          (onClick)="onButtonClick('icon-warning')"
+        ></p-button>
+        <p-button
+          icon="pi pi-times"
+          [rounded]="true"
+          severity="danger"
+          (onClick)="onButtonClick('icon-danger')"
+        ></p-button>
+      </div>
+    </div>
+
+    <div class="component-demo">
+      <h3>Raised Buttons</h3>
+      <div class="button-group">
+        <p-button label="Primary" [raised]="true"></p-button>
+        <p-button
+          label="Secondary"
+          severity="secondary"
+          [raised]="true"
+        ></p-button>
+        <p-button label="Success" severity="success" [raised]="true"></p-button>
+        <p-button label="Info" severity="info" [raised]="true"></p-button>
+        <p-button label="Warning" severity="warning" [raised]="true"></p-button>
+        <p-button label="Danger" severity="danger" [raised]="true"></p-button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tags Section -->
+  <section class="showcase-section">
+    <h2 class="section-title">Tags - All Severities</h2>
+    <div class="component-demo">
+      <div class="tag-group">
+        <p-tag value="Primary"></p-tag>
+        <p-tag value="Secondary" severity="secondary"></p-tag>
+        <p-tag value="Success" severity="success"></p-tag>
+        <p-tag value="Info" severity="info"></p-tag>
+        <p-tag value="Warning" severity="warning"></p-tag>
+        <p-tag value="Danger" severity="danger"></p-tag>
+      </div>
+    </div>
+
+    <div class="component-demo">
+      <h3>Tags with Icons</h3>
+      <div class="tag-group">
+        <p-tag icon="pi pi-user" value="Primary"></p-tag>
+        <p-tag icon="pi pi-check" value="Success" severity="success"></p-tag>
+        <p-tag icon="pi pi-info" value="Info" severity="info"></p-tag>
+        <p-tag
+          icon="pi pi-exclamation-triangle"
+          value="Warning"
+          severity="warning"
+        ></p-tag>
+        <p-tag icon="pi pi-times" value="Danger" severity="danger"></p-tag>
+      </div>
+    </div>
+
+    <div class="component-demo">
+      <h3>Rounded Tags</h3>
+      <div class="tag-group">
+        <p-tag value="Primary" [rounded]="true"></p-tag>
+        <p-tag value="Secondary" severity="secondary" [rounded]="true"></p-tag>
+        <p-tag value="Success" severity="success" [rounded]="true"></p-tag>
+        <p-tag value="Info" severity="info" [rounded]="true"></p-tag>
+        <p-tag value="Warning" severity="warning" [rounded]="true"></p-tag>
+        <p-tag value="Danger" severity="danger" [rounded]="true"></p-tag>
+      </div>
+    </div>
+  </section>
+
+  <!-- Table Section -->
+  <section class="showcase-section">
+    <h2 class="section-title">Table - Employee Data</h2>
+    <div class="component-demo">
+      <p-table
+        [value]="employees"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [tableStyle]="{ 'min-width': '60rem' }"
+        selectionMode="single"
+        [(selection)]="selectedEmployee"
+        (onRowSelect)="onRowSelect($event)"
+        dataKey="id"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Join Date</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-employee>
+          <tr [pSelectableRow]="employee">
+            <td>{{ employee.id }}</td>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.email }}</td>
+            <td>{{ employee.department }}</td>
+            <td>{{ employee.role }}</td>
+            <td>
+              <p-tag
+                [value]="employee.status"
+                [severity]="getStatusSeverity(employee.status)"
+              ></p-tag>
+            </td>
+            <td>{{ employee.joinDate }}</td>
+            <td>
+              <div class="table-actions">
+                <p-button
+                  icon="pi pi-eye"
+                  [rounded]="true"
+                  [text]="true"
+                  severity="info"
+                  (onClick)="onButtonClick('view')"
+                ></p-button>
+                <p-button
+                  icon="pi pi-pencil"
+                  [rounded]="true"
+                  [text]="true"
+                  severity="warning"
+                  (onClick)="onButtonClick('edit')"
+                ></p-button>
+                <p-button
+                  icon="pi pi-trash"
+                  [rounded]="true"
+                  [text]="true"
+                  severity="danger"
+                  (onClick)="onButtonClick('delete')"
+                ></p-button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8">No employees found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </section>
+
+  <!-- Card Section -->
+  <section class="showcase-section">
+    <h2 class="section-title">Cards - Employee Details</h2>
+    <div class="component-demo">
+      <div class="card-grid">
+        <p-card
+          *ngFor="let employee of employees.slice(0, 3); trackBy: trackById"
+          [header]="employee.name"
+          [subheader]="employee.role"
+        >
+          <ng-template pTemplate="header">
+            <div class="card-header-content">
+              <p-tag
+                [value]="employee.status"
+                [severity]="getStatusSeverity(employee.status)"
+              ></p-tag>
+            </div>
+          </ng-template>
+          <p><strong>Email:</strong> {{ employee.email }}</p>
+          <p><strong>Department:</strong> {{ employee.department }}</p>
+          <p><strong>Manager:</strong> {{ employee.manager }}</p>
+          <p><strong>Join Date:</strong> {{ employee.joinDate }}</p>
+          <p class="employee-bio">{{ employee.bio }}</p>
+          <ng-template pTemplate="footer">
+            <div class="card-actions">
+              <p-button
+                label="View Details"
+                icon="pi pi-eye"
+                severity="info"
+                [outlined]="true"
+              ></p-button>
+              <p-button
+                label="Edit"
+                icon="pi pi-pencil"
+                severity="warning"
+                [outlined]="true"
+              ></p-button>
+            </div>
+          </ng-template>
+        </p-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Simple Card Variants -->
+  <section class="showcase-section">
+    <h2 class="section-title">Card Variants</h2>
+    <div class="component-demo">
+      <div class="card-grid">
+        <p-card header="Simple Card">
+          <p>This is a simple card with just a header and content.</p>
+        </p-card>
+
+        <p-card header="Card with Subheader" subheader="Additional context">
+          <p>This card includes both header and subheader text.</p>
+        </p-card>
+
+        <p-card>
+          <ng-template pTemplate="header">
+            <img
+              alt="Card"
+              src="https://primefaces.org/cdn/primeng/images/usercard.png"
+            />
+          </ng-template>
+          <p>Card with custom header template containing an image.</p>
+        </p-card>
+      </div>
+    </div>
+  </section>
+</div>

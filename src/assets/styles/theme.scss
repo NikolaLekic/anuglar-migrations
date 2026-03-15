@@ -1,0 +1,171 @@
+// ════════════════════════════════════════════════
+//  theme.scss
+//  SCSS compile-time variables + CSS custom properties
+//  All CSS custom properties are assigned from the SCSS
+//  variables so every value lives in one place.
+// ════════════════════════════════════════════════
+
+// ─── SCSS colour palette ─────────────────────────
+$primary:           #4f46e5;
+$primary-light:     #818cf8;
+$primary-dark:      #3730a3;
+$primary-text:      #ffffff;
+
+$accent:            #06b6d4;
+$accent-text:       #ffffff;
+
+// Semantic status
+$success:           #22c55e;
+$success-bg:        #f0fdf4;
+$success-text:      #166534;
+$success-dark:      #16a34a;
+
+$info:              #3b82f6;
+$info-bg:           #eff6ff;
+$info-text:         #1e40af;
+$info-dark:         #2563eb;
+
+$warn:              #f59e0b;
+$warn-bg:           #fffbeb;
+$warn-text:         #92400e;
+$warn-dark:         #d97706;
+
+$danger:            #ef4444;
+$danger-bg:         #fef2f2;
+$danger-text:       #991b1b;
+$danger-dark:       #dc2626;
+
+// Surfaces
+$surface-a:         #ffffff;
+$surface-b:         #f8fafc;
+$surface-c:         #f1f5f9;
+$surface-d:         #e2e8f0;
+$surface-ground:    #f1f5f9;
+$surface-card:      #ffffff;
+$surface-border:    #e2e8f0;
+$surface-hover:     #eef2ff;
+
+// Text
+$text-color:        #1e293b;
+$text-secondary:    #64748b;
+$text-disabled:     #94a3b8;
+
+// Typography
+$font-family:       'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$font-size-base:    14px;
+
+// Spacing
+$content-padding:   1rem;
+$inline-spacing:    0.5rem;
+
+// Borders
+$border-radius:     6px;
+$border-radius-lg:  8px;
+$border-radius-xl:  12px;
+$border-radius-pill: 9999px;
+
+// Shadows
+$shadow-sm:   0 1px 2px rgba(0, 0, 0, 0.05);
+$shadow-card: 0 1px 3px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
+$shadow-md:   0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05);
+$shadow-lg:   0 10px 25px rgba(0, 0, 0, 0.12);
+
+// Transitions
+$speed:       150ms;
+$easing:      ease;
+
+// Focus ring (uses primary with alpha)
+$focus-ring:  0 0 0 3px rgba(79, 70, 229, 0.25);
+
+
+// ════════════════════════════════════════════════
+//  CSS Custom Properties
+//  (assigned from SCSS vars — single source of truth)
+// ════════════════════════════════════════════════
+:root {
+  // Brand
+  --primary-color:        #{$primary};
+  --primary-color-light:  #{$primary-light};
+  --primary-color-dark:   #{$primary-dark};
+  --primary-color-text:   #{$primary-text};
+
+  // Accent
+  --accent-color:         #{$accent};
+  --accent-color-text:    #{$accent-text};
+
+  // Status
+  --success:              #{$success};
+  --success-bg:           #{$success-bg};
+  --success-text:         #{$success-text};
+  --success-dark:         #{$success-dark};
+
+  --info:                 #{$info};
+  --info-bg:              #{$info-bg};
+  --info-text:            #{$info-text};
+  --info-dark:            #{$info-dark};
+
+  --warn:                 #{$warn};
+  --warn-bg:              #{$warn-bg};
+  --warn-text:            #{$warn-text};
+  --warn-dark:            #{$warn-dark};
+
+  --danger:               #{$danger};
+  --danger-bg:            #{$danger-bg};
+  --danger-text:          #{$danger-text};
+  --danger-dark:          #{$danger-dark};
+
+  // Surfaces
+  --surface-a:            #{$surface-a};
+  --surface-b:            #{$surface-b};
+  --surface-c:            #{$surface-c};
+  --surface-d:            #{$surface-d};
+  --surface-e:            #{$surface-a};
+  --surface-f:            #{$surface-a};
+  --surface-ground:       #{$surface-ground};
+  --surface-section:      #{$surface-a};
+  --surface-card:         #{$surface-card};
+  --surface-overlay:      #{$surface-a};
+  --surface-border:       #{$surface-border};
+  --surface-hover:        #{$surface-hover};
+
+  // Text
+  --text-color:           #{$text-color};
+  --text-color-secondary: #{$text-secondary};
+  --text-color-disabled:  #{$text-disabled};
+
+  // Named palette (legacy PrimeNG usage)
+  --green-500:   #{$success};
+  --red-500:     #{$danger};
+  --yellow-500:  #{$warn};
+  --blue-500:    #{$info};
+  --orange-500:  #f97316;
+  --purple-500:  #a855f7;
+
+  // Typography
+  --font-family:          #{$font-family};
+  --font-size:            #{$font-size-base};
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-bold:     700;
+
+  // Spacing
+  --content-padding:      #{$content-padding};
+  --inline-spacing:       #{$inline-spacing};
+
+  // Borders
+  --border-radius:        #{$border-radius};
+  --surface-border-radius:#{$border-radius-lg};
+
+  // Shadows
+  --shadow-sm:    #{$shadow-sm};
+  --card-shadow:  #{$shadow-card};
+  --shadow-md:    #{$shadow-md};
+  --overlay-shadow: #{$shadow-lg};
+
+  // Focus ring
+  --focus-ring:   #{$focus-ring};
+
+  // Transitions
+  --transition-speed:   #{$speed};
+  --transition-easing:  #{$easing};
+}

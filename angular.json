@@ -35,8 +35,8 @@
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeflex/primeflex.css",
-              "src/assets/styles/theme.css",
-              "src/assets/styles/resources.min.css",
+              "src/assets/styles/theme.scss",
+              "src/assets/styles/resources.min.scss",
               "src/styles.scss"
             ],
             "scripts": []
