@@ -14,6 +14,7 @@
         "createDefaultProgram": true
       },
       "rules": {
+        "@angular-eslint/prefer-standalone": "off",
         "@angular-eslint/component-selector": [
           "error",
           { "type": "element", "prefix": "app", "style": "kebab-case" }

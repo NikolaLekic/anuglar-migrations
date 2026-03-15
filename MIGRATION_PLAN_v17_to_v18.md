@@ -68,13 +68,27 @@ The schematic will:
   no action required in our templates because we already use `routerLink` attribute binding)
 - Warn about deprecated APIs
 
+> **Windows workaround — EPERM / TAR_ENTRY_ERROR:**
+> On Windows, `npx @angular/cli@18 update` can fail with npm cache corruption errors
+> (`EPERM`, `TAR_ENTRY_ERROR`, `ENOTEMPTY`). If this happens, manually edit `package.json`
+> to bump all `@angular/*` packages and `@angular-devkit/build-angular` to their target
+> versions (see Compatibility Matrix), then run:
+>
+> ```bash
+> npm install --legacy-peer-deps
+> ```
+>
+> The `--legacy-peer-deps` flag is necessary because some packages (e.g. `@angular-eslint@17.x`
+> still in `node_modules`) will conflict with the new `@angular/core@18` peer requirement
+> until you also upgrade them in Phase 1.4.
+
 ### 1.3 Update build tooling
 
 ```bash
 npm install --save-dev @angular-devkit/build-angular@^18.2.0
 ```
 
-### 1.4 Update `@angular-eslint`
+### 1.4 Update `@angular-eslint` and `@typescript-eslint`
 
 ```bash
 npm install --save-dev \
@@ -83,6 +97,23 @@ npm install --save-dev \
   @angular-eslint/eslint-plugin-template@^18.0.0 \
   @angular-eslint/template-parser@^18.0.0
 ```
+
+> **Breaking: `@typescript-eslint` must be at v8** — `@angular-eslint@18` depends on
+> `@typescript-eslint/utils` which is only distributed at v8. Installing `@angular-eslint@18`
+> while `@typescript-eslint/eslint-plugin` and `@typescript-eslint/parser` remain at v7 causes
+> a module-resolution conflict that prevents ESLint from loading any Angular plugin rule.
+>
+> After updating `@angular-eslint`, upgrade all three `@typescript-eslint` packages together:
+>
+> ```bash
+> npm install --save-dev \
+>   @typescript-eslint/eslint-plugin@^8.0.0 \
+>   @typescript-eslint/parser@^8.0.0 \
+>   @typescript-eslint/utils@^8.0.0
+> ```
+>
+> All three must be on the **same major version**. The `@typescript-eslint/utils` package is an
+> explicit peer dependency of `@angular-eslint/utils@18` and must be installed directly.
 
 ### 1.5 Disable the new `prefer-standalone` rule in `.eslintrc.json`
 
@@ -227,7 +258,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { providePrimeNG } from 'primeng/config';
 import { definePreset } from '@primeng/themes';
-import { Nora } from '@primeng/themes/nora';
+import Nora from '@primeng/themes/nora';           // default export — NOT named
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
@@ -449,11 +480,29 @@ Find the `thead > tr > th` block and update:
 &.p-datatable-sortable-column.p-datatable-column-sorted .p-datatable-sort-icon { ... }
 ```
 
+### 4.5 Table — selected body row
+
+| Old class | New class |
+|---|---|
+| `.p-highlight` on `tbody > tr` | `.p-datatable-row-selected` |
+
+Find the `tbody > tr` block and update the selected-row rule:
+
+```scss
+// BEFORE
+&.p-highlight > td {
+  background: var(--surface-hover);
+  color: var(--primary-color);
+}
+
+// AFTER
+&.p-datatable-row-selected > td {
+  background: var(--surface-hover);
+  color: var(--primary-color);
+}
+```
+
 **Commit: `fix: update PrimeNG 18 CSS class renames in resources.min.scss`**
-
----
-
-## Phase 5 — TypeScript Type Updates
 
 ### 5.1 `p-tag` severity — add `'secondary'` and `'contrast'`
 
@@ -491,7 +540,58 @@ getStatusSeverity(
 
 ---
 
-## Phase 6 — PrimeFlex (No Changes Required)
+## Phase 5b — PrimeNG 18 Renamed `Message` → `ToastMessageOptions`
+
+PrimeNG 18 **renamed the `Message` interface** (used for the `[(value)]` binding on `<p-messages>`)
+to `ToastMessageOptions`. The old name is no longer exported from `primeng/api`.
+
+Any component that declares a `messages` array typed as `Message[]` will fail to compile:
+
+```
+error TS2724: Module '"primeng/api"' has no exported member 'Message'.
+Did you mean 'ToastMessageOptions'?
+```
+
+### What to update
+
+Search for `import { Message` (or `import { ..., Message, ...`) from `primeng/api` across all
+component files. Replace both the import and the type annotation.
+
+**Pattern — applies to every component that uses `<p-messages>`:**
+
+```typescript
+// BEFORE
+import { Message, MenuItem } from 'primeng/api';
+// ...
+messages: Message[] = [];
+
+// AFTER
+import { ToastMessageOptions, MenuItem } from 'primeng/api';
+// ...
+messages: ToastMessageOptions[] = [];
+```
+
+**Files to update in this project:**
+
+| File | Change |
+|---|---|
+| `employee-list.component.ts` | `Message[]` → `ToastMessageOptions[]` |
+| `employee-detail.component.ts` | `Message[]` → `ToastMessageOptions[]` |
+| `showcase.component.ts` | All five `Message[]` arrays → `ToastMessageOptions[]` |
+
+> **What about `Message` from `primeng/message`?**
+> The component named `Message` (the single-message component, `<p-message>`) is unaffected —
+> only the data interface `Message` from `primeng/api` was renamed.
+
+> **`<p-messages>` deprecation warning (non-breaking):**
+> PrimeNG 18 logs a console warning at startup: *"Messages component is deprecated as of v18.
+> Use Message component instead."* This does **not** break anything — the component still renders
+> correctly. Migrating `<p-messages>` to the new `<p-message>` API is optional and out of scope
+> for this upgrade.
+
+**Commit: `fix: rename PrimeNG Message interface to ToastMessageOptions`**
+
+---
 
 PrimeFlex **3.3.1 is fully compatible with PrimeNG 18**. PrimeFlex is a standalone utility CSS
 library — it has no runtime coupling to PrimeNG's component layer or theming system. No version
@@ -545,13 +645,14 @@ npm run start:all
 
 | File | Change |
 |---|---|
-| `package.json` | `@angular/*` → `^18.2.x`, `@angular-devkit/build-angular` → `^18.2.x`, `@angular-eslint/*` → `^18.x`, `primeng` → `^18.x`, add `@primeng/themes: ^18.x` |
+| `package.json` | `@angular/*` → `^18.2.x`, `@angular-devkit/build-angular` → `^18.2.x`, `@angular-eslint/*` → `^18.x`, `@typescript-eslint/{eslint-plugin,parser,utils}` → `^8.x`, `primeng` → `^18.x`, add `@primeng/themes: ^18.x` |
 | `angular.json` | Remove `primeng/resources/primeng.min.css` from styles array |
-| `src/app/app.module.ts` | Import `providePrimeNG` + `Nora`, add to `providers` array |
+| `src/app/app.module.ts` | Import `providePrimeNG` + `Nora` (default import), add `definePreset` with indigo/slate tokens and `cssLayer` |
 | `.eslintrc.json` | Add `"@angular-eslint/prefer-standalone": "off"` to TS rules |
 | `src/assets/styles/resources.min.scss` | Breadcrumb, messages, paginator, table class renames (Phase 4) |
-| `src/app/features/employees/employee-list/employee-list.component.ts` | `getStatusSeverity` return type union |
-| `src/app/features/employees/employee-detail/employee-detail.component.ts` | `getStatusSeverity` return type union |
+| `src/app/features/employees/employee-list/employee-list.component.ts` | `Message[]` → `ToastMessageOptions[]`; `getStatusSeverity` return type union |
+| `src/app/features/employees/employee-detail/employee-detail.component.ts` | `Message[]` → `ToastMessageOptions[]`; `getStatusSeverity` return type union |
+| `src/app/features/showcase/showcase.component.ts` | Five `Message[]` arrays → `ToastMessageOptions[]` |
 
 ---
 

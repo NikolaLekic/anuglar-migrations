@@ -146,33 +146,33 @@ body {
   padding: 0 0 1rem 0;
 
   ul li {
-    .p-menuitem-link {
+    .p-breadcrumb-item-link {
       border-radius: var(--border-radius);
       transition: color $speed $easing;
 
-      .p-menuitem-text {
+      .p-breadcrumb-item-label {
         color: var(--text-color-secondary);
         font-size: 0.8125rem;
       }
 
-      .p-menuitem-icon {
+      .p-breadcrumb-item-icon {
         color: var(--text-color-secondary);
         font-size: 0.875rem;
       }
 
       &:hover {
-        .p-menuitem-text,
-        .p-menuitem-icon { color: var(--primary-color); }
+        .p-breadcrumb-item-label,
+        .p-breadcrumb-item-icon { color: var(--primary-color); }
       }
     }
 
-    &.p-breadcrumb-chevron {
+    &.p-breadcrumb-separator {
       color: var(--surface-d);
       margin: 0 0.25rem;
       font-size: 0.75rem;
     }
 
-    &:last-child .p-menuitem-link .p-menuitem-text {
+    &:last-child .p-breadcrumb-item-link .p-breadcrumb-item-label {
       color: var(--text-color);
       font-weight: 600;
     }
@@ -193,7 +193,7 @@ body {
     border-style: solid;
     margin-bottom: 0.5rem;
 
-    .p-message-wrapper {
+    .p-message-content {
       padding: 0.75rem 1rem;
       align-items: flex-start;
       gap: 0.625rem;
@@ -210,7 +210,7 @@ body {
       margin-right: 0.25rem;
     }
 
-    .p-message-close {
+    .p-message-close-button {
       opacity: 0.6;
       transition: opacity $speed;
 
@@ -476,17 +476,17 @@ body {
     border-bottom: 1px solid var(--surface-border);
     white-space: nowrap;
 
-    &.p-sortable-column {
+    &.p-datatable-sortable-column {
       cursor: pointer;
       transition: background $speed;
 
       &:hover { background: var(--surface-c); }
 
-      &.p-highlight {
+      &.p-datatable-column-sorted {
         background: var(--surface-c);
         color: var(--primary-color);
 
-        .p-sortable-column-icon { color: var(--primary-color); }
+        .p-datatable-sort-icon { color: var(--primary-color); }
       }
 
       &:focus { box-shadow: none; outline: none; }
@@ -510,7 +510,7 @@ body {
 
     &:hover > td { background: var(--surface-hover); }
 
-    &.p-highlight > td {
+    &.p-datatable-row-selected > td {
       background: var(--surface-hover);
       color: var(--primary-color);
     }
@@ -532,7 +532,11 @@ body {
   padding: 0.625rem 1rem;
   border-radius: 0 0 var(--surface-border-radius) var(--surface-border-radius);
 
-  .p-paginator-element {
+  .p-paginator-first,
+  .p-paginator-prev,
+  .p-paginator-page,
+  .p-paginator-next,
+  .p-paginator-last {
     border-radius: var(--border-radius);
     border: none;
     color: var(--text-color-secondary);
@@ -546,7 +550,7 @@ body {
       color: var(--text-color);
     }
 
-    &.p-highlight {
+    &.p-paginator-page-selected {
       background: var(--primary-color);
       color: #fff;
       border-radius: var(--border-radius);

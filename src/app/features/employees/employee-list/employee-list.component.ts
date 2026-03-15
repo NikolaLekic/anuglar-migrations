@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Message, MenuItem } from 'primeng/api';
+import { ToastMessageOptions, MenuItem } from 'primeng/api';
 import { Employee } from '../../../core/models/employee.model';
 import { EmployeeService } from '../../../core/services/employee.service';
 
@@ -12,7 +12,7 @@ import { EmployeeService } from '../../../core/services/employee.service';
 export class EmployeeListComponent implements OnInit {
   employees: Employee[] = [];
   loading = false;
-  messages: Message[] = [];
+  messages: ToastMessageOptions[] = [];
 
   breadcrumbItems: MenuItem[] = [{ label: 'Employees' }];
   homeItem: MenuItem = { icon: 'pi pi-home', routerLink: '/' };
@@ -69,13 +69,13 @@ export class EmployeeListComponent implements OnInit {
     ];
   }
 
-  getStatusSeverity(status: string): 'success' | 'danger' | 'warning' | 'info' {
-    const map: Record<string, 'success' | 'danger' | 'warning' | 'info'> = {
+  getStatusSeverity(status: string): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | undefined {
+    const map: Record<string, 'success' | 'secondary' | 'info' | 'warn' | 'danger'> = {
       active: 'success',
       inactive: 'danger',
-      'on-leave': 'warning',
+      'on-leave': 'warn',
     };
-    return map[status] ?? 'info';
+    return map[status] ?? undefined;
   }
 
   getStatusLabel(status: string): string {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Message } from 'primeng/api';
+import { ToastMessageOptions } from 'primeng/api';
 import { Employee } from '../../core/models/employee.model';
 import { MOCK_EMPLOYEES } from './showcase.fixture';
 
@@ -13,11 +13,11 @@ export class ShowcaseComponent implements OnInit {
   selectedEmployee: Employee | null = null;
 
   // Message examples
-  successMessages: Message[] = [];
-  infoMessages: Message[] = [];
-  warnMessages: Message[] = [];
-  errorMessages: Message[] = [];
-  allMessages: Message[] = [];
+  successMessages: ToastMessageOptions[] = [];
+  infoMessages: ToastMessageOptions[] = [];
+  warnMessages: ToastMessageOptions[] = [];
+  errorMessages: ToastMessageOptions[] = [];
+  allMessages: ToastMessageOptions[] = [];
 
   // Button states
   buttonDisabled = false;
@@ -100,14 +100,14 @@ export class ShowcaseComponent implements OnInit {
 
   getStatusSeverity(
     status: string,
-  ): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | undefined {
+  ): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | undefined {
     switch (status) {
       case 'active':
         return 'success';
       case 'inactive':
         return 'danger';
       case 'on-leave':
-        return 'warning';
+        return 'warn';
       default:
         return 'info';
     }

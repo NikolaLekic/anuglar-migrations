@@ -139,8 +139,8 @@ describe('ShowcaseComponent', () => {
       expect(component.getStatusSeverity('inactive')).toBe('danger');
     });
 
-    it('should return warning severity for on-leave status', () => {
-      expect(component.getStatusSeverity('on-leave')).toBe('warning');
+    it('should return warn severity for on-leave status', () => {
+      expect(component.getStatusSeverity('on-leave')).toBe('warn');
     });
 
     it('should return info severity for unknown status', () => {
