@@ -1,27 +1,67 @@
-# AiApp
+# AI App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+![Angular](https://img.shields.io/badge/Angular-17-dd0031?logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)
+![JSON Server](https://img.shields.io/badge/Mock_API-json--server-black)
 
-## Development server
+Employee management demo application built with Angular 17, PrimeNG, and a local mock API (`json-server`).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Tech Stack
 
-## Code scaffolding
+- Angular 17
+- TypeScript
+- PrimeNG + PrimeFlex + PrimeIcons
+- JSON Server for local API mocking
+- ESLint + Angular ESLint
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Prerequisites
 
-## Build
+- Node.js 18+ (LTS recommended)
+- npm 9+
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Quick Start
 
-## Running unit tests
+```bash
+npm install
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run app and API together:
 
-## Running end-to-end tests
+```bash
+npm run start:all
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Then open:
 
-## Further help
+- App: `http://localhost:4200`
+- API: `http://localhost:3000`
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Available Scripts
+
+- `npm start` - Start Angular app (`ng serve --port 4200 --open`)
+- `npm run start:api` - Start JSON Server mock API on port `3000`
+- `npm run start:all` - Run app and API concurrently
+- `npm run build` - Build the app
+- `npm run build:prod` - Production build
+- `npm run watch` - Development build in watch mode
+- `npm test` - Run unit tests
+- `npm run lint` - Run lint checks
+- `npm run lint:fix` - Auto-fix lint issues
+
+## Project Structure
+
+```text
+src/app/
+	core/       # shared models/services
+	features/   # feature modules (employees)
+	shared/     # layout + reusable UI
+```
+
+## Build Output
+
+Production build artifacts are generated in `dist/`.
+
+## Notes
+
+- Mock data is stored in `db.json`.
+- `.gitignore` is configured to exclude local/build artifacts for clean repository pushes.
