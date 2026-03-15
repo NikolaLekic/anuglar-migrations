@@ -202,25 +202,84 @@ The `styles` array should become:
 ]
 ```
 
-### 3.3 Add `providePrimeNG()` to `AppModule`
+### 3.3 Add `providePrimeNG()` with `AppPreset` and `cssLayer` to `AppModule`
 
-PrimeNG 18 requires a provider call to register the theme at bootstrap time. Because this project
-uses a fully custom CSS theme (all visual styling lives in `theme.scss` and `resources.min.scss`),
-we pass `{ theme: { preset: Nora } }` — `Nora` is the most minimal PrimeNG preset and least
-likely to conflict with our custom overrides.
+PrimeNG 18 requires a provider call to register the theme at bootstrap time. Two additions
+are required beyond the minimal `{ preset: Nora }` call:
 
-Open `src/app/app.module.ts` and apply the following changes:
+**Why `definePreset` is required (not optional):**
+Nora's default primary palette is **Emerald (#10b981)**, not Indigo (#4f46e5). Without
+overriding the primary token, focus rings, selected table rows, active paginator pages, and
+all highlight states will be emerald green — a direct visual regression.
+
+**Why `cssLayer` is required (not optional):**
+PrimeNG 18 appends component `<style>` tags to `<head>` at runtime via `HEAD.appendChild`,
+placing them *after* Angular's compiled stylesheets. This gives PrimeNG higher CSS source
+order. The `cssLayer` option wraps all PrimeNG styles in `@layer primeng { }` — CSS layers
+always lose to non-layered rules, so every rule in `resources.min.scss` wins unconditionally
+with no specificity changes needed.
+
+Open `src/app/app.module.ts` and replace with:
 
 ```typescript
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { providePrimeNG } from 'primeng/config';   // NEW
-import { Nora } from '@primeng/themes/nora';         // NEW
+import { providePrimeNG } from 'primeng/config';
+import { definePreset } from '@primeng/themes';
+import { Nora } from '@primeng/themes/nora';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
+
+// Override Nora's default Emerald primary with our Indigo palette,
+// and align surface tokens with the project's $surface-* variables.
+// Severity colors (success/info/warn/danger) are NOT overridden here —
+// they vary per component in PrimeNG 18's token structure and are handled
+// more precisely by the existing class overrides in resources.min.scss.
+const AppPreset = definePreset(Nora, {
+  semantic: {
+    primary: {
+      50:  '{indigo.50}',
+      100: '{indigo.100}',
+      200: '{indigo.200}',
+      300: '{indigo.300}',
+      400: '{indigo.400}',
+      500: '{indigo.500}',   // #4f46e5 — our $primary
+      600: '{indigo.600}',   // #4338ca
+      700: '{indigo.700}',   // #3730a3 — our $primary-dark
+      800: '{indigo.800}',
+      900: '{indigo.900}',
+      950: '{indigo.950}',
+    },
+    colorScheme: {
+      light: {
+        primary: {
+          color:         '{primary.500}',   // #4f46e5
+          contrastColor: '#ffffff',
+          hoverColor:    '{primary.700}',   // #3730a3
+          activeColor:   '{primary.700}',
+        },
+        // Slate surface scale matches our $surface-b/c/d variables exactly
+        surface: {
+          0:   '#ffffff',
+          50:  '{slate.50}',    // #f8fafc  = $surface-b
+          100: '{slate.100}',   // #f1f5f9  = $surface-c / $surface-ground
+          200: '{slate.200}',   // #e2e8f0  = $surface-d / $surface-border
+          300: '{slate.300}',
+          400: '{slate.400}',
+          500: '{slate.500}',   // #64748b  = $text-secondary
+          600: '{slate.600}',
+          700: '{slate.700}',
+          800: '{slate.800}',   // #1e293b  = $text-color
+          900: '{slate.900}',
+          950: '{slate.950}',
+        },
+      },
+    },
+  },
+});
 
 @NgModule({
   declarations: [AppComponent],
@@ -232,19 +291,41 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
   ],
   providers: [
-    providePrimeNG({ theme: { preset: Nora } }),     // NEW
+    providePrimeNG({
+      theme: {
+        preset: AppPreset,
+        options: {
+          darkModeSelector: false,   // no dark mode in this app
+          // Wraps all PrimeNG component styles in @layer primeng { }.
+          // CSS layers always lose to non-layered rules, so resources.min.scss
+          // wins unconditionally regardless of runtime injection order.
+          cssLayer: {
+            name: 'primeng',
+            order: 'primeng',
+          },
+        },
+      },
+    }),
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
 ```
 
-> **Why Nora?** All three built-in presets (Aura, Lara, Nora) generate CSS custom properties that
-> our `resources.min.scss` overrides. `Nora` outputs the thinnest set of default styles, reducing
-> the chance of a preset value bleeding through. Because every component's visual appearance in
-> this app is driven by our own SCSS, the choice of preset has minimal visual impact.
+### 3.4 Why `resources.min.scss` is kept unchanged
 
-**Commit: `chore: upgrade PrimeNG 17 → 18, switch to providePrimeNG()`**
+With `cssLayer` active, ALL existing class overrides in `resources.min.scss` win
+unconditionally. No lines need to be removed. The file continues to handle:
+
+| Area | Reason for keeping |
+|---|---|
+| Button severity colors (success/info/warn/danger) | Severity tokens in PrimeNG 18 are per-component, use different color scales (`sky` vs `blue`, `orange` vs `yellow`), and would require overriding 5+ components individually |
+| Message border-left 4px design | Custom design decision not expressed in any PrimeNG token |
+| Button/card/tag padding, font-size, border-radius | Structural refinements beyond token scope |
+| Breadcrumb layout | Structural; no token equivalent |
+| Table row padding, hover state | Structural refinements |
+
+**Commit: `chore: upgrade PrimeNG 17 → 18, AppPreset with definePreset + cssLayer`**
 
 ---
 
