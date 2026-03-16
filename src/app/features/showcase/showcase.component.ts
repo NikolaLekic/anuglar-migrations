@@ -4,9 +4,10 @@ import { Employee } from '../../core/models/employee.model';
 import { MOCK_EMPLOYEES } from './showcase.fixture';
 
 @Component({
-  selector: 'app-showcase',
-  templateUrl: './showcase.component.html',
-  styleUrls: ['./showcase.component.scss'],
+    selector: 'app-showcase',
+    templateUrl: './showcase.component.html',
+    styleUrls: ['./showcase.component.scss'],
+    standalone: false
 })
 export class ShowcaseComponent implements OnInit {
   employees: Employee[] = [];

@@ -5,9 +5,10 @@ import { Employee } from '../../../core/models/employee.model';
 import { EmployeeService } from '../../../core/services/employee.service';
 
 @Component({
-  selector: 'app-employee-detail',
-  templateUrl: './employee-detail.component.html',
-  styleUrls: ['./employee-detail.component.scss'],
+    selector: 'app-employee-detail',
+    templateUrl: './employee-detail.component.html',
+    styleUrls: ['./employee-detail.component.scss'],
+    standalone: false
 })
 export class EmployeeDetailComponent implements OnInit {
   employee: Employee | null = null;
