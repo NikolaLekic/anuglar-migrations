@@ -51,7 +51,7 @@ $text-secondary:    #64748b;
 $text-disabled:     #94a3b8;
 
 // Typography
-$font-family:       'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$font-family:       'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 $font-size-base:    14px;
 
 // Spacing
@@ -143,6 +143,7 @@ $focus-ring:  0 0 0 3px rgba(79, 70, 229, 0.25);
 
   // Typography
   --font-family:          #{$font-family};
+  --p-font-family:        #{$font-family};   // overrides Nora's runtime token
   --font-size:            #{$font-size-base};
   --font-weight-normal:   400;
   --font-weight-medium:   500;
