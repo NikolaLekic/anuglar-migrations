@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastMessageOptions } from 'primeng/api';
+import { TableRowSelectEvent } from 'primeng/table';
 import { Employee } from '../../core/models/employee.model';
 import { MOCK_EMPLOYEES } from './showcase.fixture';
 
@@ -83,9 +84,9 @@ export class ShowcaseComponent implements OnInit {
     ];
   }
 
-  onRowSelect(event: { data?: Employee }): void {
+  onRowSelect(event: TableRowSelectEvent<Employee>): void {
     // Row selected event handler
-    if (event.data) {
+    if (event.data && !Array.isArray(event.data)) {
       this.selectedEmployee = event.data;
     }
   }

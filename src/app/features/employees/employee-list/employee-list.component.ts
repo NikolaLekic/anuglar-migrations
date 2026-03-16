@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastMessageOptions, MenuItem } from 'primeng/api';
+import { TableRowSelectEvent } from 'primeng/table';
 import { Employee } from '../../../core/models/employee.model';
 import { EmployeeService } from '../../../core/services/employee.service';
 
@@ -58,8 +59,11 @@ export class EmployeeListComponent implements OnInit {
     });
   }
 
-  onRowSelect(employee: Employee): void {
-    this.router.navigate(['/employees', employee.id]);
+  onRowSelect(event: TableRowSelectEvent<Employee>): void {
+    const employee = event.data;
+    if (employee && !Array.isArray(employee)) {
+      this.router.navigate(['/employees', employee.id]);
+    }
   }
 
   onAddNew(): void {
